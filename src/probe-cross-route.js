@@ -7,7 +7,9 @@ import { BinanceWeb3Client } from './binance-client.js';
 const USDT = '0x55d398326f99059fF775485246999027B3197955';
 const USDT_DECIMALS = 18;
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const spreadsPath = path.join(root, 'reports', 'cross-representation-spreads.json');
+const spreadFilename = process.env.CROSS_SPREAD_INPUT_FILE || 'cross-representation-spreads.json';
+if (path.basename(spreadFilename) !== spreadFilename) throw new Error('CROSS_SPREAD_INPUT_FILE must be a filename');
+const spreadsPath = path.join(root, 'reports', spreadFilename);
 const wallet = process.env.USER_WALLET_ADDRESS;
 const notionalUsd = Number(process.env.CROSS_PROBE_USD || 500);
 const signalIndex = Number(process.env.CROSS_SIGNAL_INDEX || 0);
@@ -18,11 +20,10 @@ if (!Number.isFinite(notionalUsd) || notionalUsd <= 0) throw new Error('CROSS_PR
 const spreadReport = JSON.parse(fs.readFileSync(spreadsPath, 'utf8'));
 const signal = spreadReport.spreads?.[signalIndex];
 if (!signal) throw new Error('No cross-representation signal is available. Run npm run scan:cross first.');
-const reportPath = path.join(
-  root,
-  'reports',
-  `cross-route-probe-${signal.underlyingTicker.toLowerCase()}.json`,
-);
+const reportFilename = process.env.CROSS_PROBE_OUTPUT_FILE
+  || `cross-route-probe-${signal.underlyingTicker.toLowerCase()}.json`;
+if (path.basename(reportFilename) !== reportFilename) throw new Error('CROSS_PROBE_OUTPUT_FILE must be a filename');
+const reportPath = path.join(root, 'reports', reportFilename);
 
 const client = new BinanceWeb3Client({
   apiKey: process.env.OC_API_KEY,

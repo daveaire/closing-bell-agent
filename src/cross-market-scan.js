@@ -6,7 +6,9 @@ import { BinanceWeb3Client } from './binance-client.js';
 import { findCrossRepresentationSpreads, normalizeRwaToken } from './decision-engine.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const reportPath = path.join(root, 'reports', 'cross-representation-spreads.json');
+const reportFilename = process.env.CROSS_SCAN_OUTPUT_FILE || 'cross-representation-spreads.json';
+if (path.basename(reportFilename) !== reportFilename) throw new Error('CROSS_SCAN_OUTPUT_FILE must be a filename');
+const reportPath = path.join(root, 'reports', reportFilename);
 const batchSize = Number(process.env.RWA_PRICE_BATCH_SIZE || 20);
 const maxPriceAgeMs = Number(process.env.MAX_PRICE_AGE_MS || 120_000);
 const minimumGrossBps = Number(process.env.MIN_CROSS_SPREAD_BPS || 25);

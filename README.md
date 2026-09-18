@@ -37,6 +37,14 @@ npm run scan:cross
 npm run probe:cross
 ```
 
+Run the observer continuously at the default 15-minute interval. It records a local event only when both calldata legs exist and quote-implied proceeds exceed the starting notional by at least `$1`:
+
+```sh
+npm run monitor:cross
+```
+
+The event is still a review candidate, not an authorization to trade. It needs funded simulations, gas accounting, inventory on the sell representation, and issuer-risk review.
+
 ## Credentialed mainnet evidence
 
 On 2026-09-18 UTC, an authenticated BSC scan returned 488 tokenized-stock candidates, including 364 whose underlying market was reported open. A read-only $5 USDT to SNXXB probe returned one LiquidMesh route, built unsigned EVM calldata, and reached the Transaction API simulation gate. Simulation failed because the test wallet had no BSC USDT, so the agent blocked the route and did not broadcast. The sanitized observation is committed in `fixtures/credentialed-observation.json`; credentials and wallet details are excluded.

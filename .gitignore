@@ -1,5 +1,6 @@
 .env
 node_modules/
 reports/live-*.json
+reports/cross-monitor*.json*
 *.log
 .DS_Store
