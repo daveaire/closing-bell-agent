@@ -2,5 +2,6 @@
 node_modules/
 reports/live-*.json
 reports/cross-monitor*.json*
+demo-output/
 *.log
 .DS_Store

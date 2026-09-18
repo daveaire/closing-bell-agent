@@ -45,6 +45,17 @@ npm run monitor:cross
 
 The event is still a review candidate, not an authorization to trade. It needs funded simulations, gas accounting, inventory on the sell representation, and issuer-risk review.
 
+## Build the demo video
+
+On macOS, install the two local rendering dependencies and build the narrated 1280×720 submission video:
+
+```sh
+pip install Pillow imageio-ffmpeg
+/opt/homebrew/bin/python3.10 scripts/build-demo-video.py
+```
+
+The generated `demo-output/closing-bell-agent-demo.mp4` is 2 minutes 11 seconds and stays outside version control.
+
 ## Credentialed mainnet evidence
 
 On 2026-09-18 UTC, an authenticated BSC scan returned 488 tokenized-stock candidates, including 364 whose underlying market was reported open. A read-only $5 USDT to SNXXB probe returned one LiquidMesh route, built unsigned EVM calldata, and reached the Transaction API simulation gate. Simulation failed because the test wallet had no BSC USDT, so the agent blocked the route and did not broadcast. The sanitized observation is committed in `fixtures/credentialed-observation.json`; credentials and wallet details are excluded.
