@@ -40,7 +40,9 @@
     .blocked { color:var(--red); }
     .safe { color:var(--green); }
     .foot { margin-top:20px; color:var(--muted); font-size:12px; display:flex; justify-content:space-between; }
-    @media (max-width:820px) { .metrics{grid-template-columns:1fr 1fr}.grid,.live{grid-template-columns:1fr}.route-proof{grid-template-columns:1fr 1fr}.asset{grid-template-columns:1fr 1fr}.decision{justify-self:start}.asset div:nth-child(4){display:none} }
+    .cross-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-top:16px; }
+    .cross-route { display:grid; grid-template-columns:1fr repeat(3,.8fr); gap:12px; align-items:end; margin-top:18px; padding-top:18px; border-top:1px solid var(--line); }
+    @media (max-width:820px) { .metrics{grid-template-columns:1fr 1fr}.grid,.live,.cross-grid{grid-template-columns:1fr}.route-proof{grid-template-columns:1fr 1fr}.asset,.cross-route{grid-template-columns:1fr 1fr}.decision{justify-self:start}.asset div:nth-child(4){display:none} }
   </style>
 </head>
 <body>
@@ -77,11 +79,17 @@
       </div>
     </div>
     <aside class="panel">
-      <div class="label">Funded simulation gate</div>
+      <div class="label">Transaction simulation gate</div>
       <h2 class="blocked" id="live-simulation">—</h2>
       <p class="sub" id="live-reason">—</p>
       <div class="proof-cell"><span class="label">Quote · build · simulation</span><strong id="live-latency">—</strong></div>
     </aside>
+  </section>
+  <section class="panel" style="margin-top:16px">
+    <div class="label">Cross-issuer execution check · $500 inventory rotation</div>
+    <h2>Gross dislocation is not executable profit</h2>
+    <p class="sub">Share-ratio-normalized bStock/Ondo signals are quoted in both directions. The gate blocks them when the returned USDT is below the starting notional.</p>
+    <div class="cross-grid" id="cross-routes"></div>
   </section>
   <div class="foot"><span id="stamp">Loading evidence…</span><span>Fixture decision set + credentialed route evidence</span></div>
 </main>
@@ -91,7 +99,7 @@
   fetch('/api/report').then(r=>r.json()).then(report=>{
     document.querySelector('#count').textContent=report.candidates.length;
     document.querySelector('#ready').textContent=report.candidates.filter(x=>x.decision==='REVIEW').length;
-    document.querySelector('#stamp').textContent='Evidence timestamp · '+report.generatedAt;
+    document.querySelector('#stamp').textContent='Fixture timestamp · '+report.generatedAt;
     document.querySelector('#assets').innerHTML=report.candidates.map(x=>`<div class="asset"><div><div class="symbol">${x.symbol}</div><div class="ticker">${x.platformId} · ${x.underlyingTicker}</div></div><div><div class="label">Token</div><div class="num">${money(x.tokenPrice)}</div></div><div><div class="label">Fair</div><div class="num">${money(x.fairTokenPrice)}</div></div><div><div class="label">Premium</div><div class="num">${bps(x.premiumBps)}</div></div><span class="decision">${x.decision}</span></div>`).join('');
     const reasons=[...new Set(report.candidates.flatMap(x=>x.reasons))];
     document.querySelector('#reasons').innerHTML=reasons.map(x=>`<li><span class="dot"></span>${x.replaceAll('-',' ')}</li>`).join('');
@@ -106,6 +114,9 @@
     document.querySelector('#live-simulation').textContent=route.simulation.status;
     document.querySelector('#live-reason').textContent=route.simulation.reason;
     document.querySelector('#live-latency').textContent=`${route.latencyMs.quote} · ${route.latencyMs.build} · ${route.latencyMs.simulation} ms`;
+  });
+  fetch('/api/cross-evidence').then(r=>r.json()).then(rows=>{
+    document.querySelector('#cross-routes').innerHTML=rows.map(x=>`<div><div class="cross-route"><div><div class="symbol">${x.underlyingTicker}</div><div class="ticker">${x.buy.platformId} → ${x.sell.platformId}</div></div><div><div class="label">Gross</div><div>${Number(x.indicatedGrossSpreadBps).toFixed(1)} bps</div></div><div><div class="label">USDT out</div><div>$${Number(x.sell.usdtOut).toFixed(2)}</div></div><div><div class="label">Decision</div><div class="blocked">${x.decision}</div></div></div><div class="ticker">Both calldata legs built · ${x.reasons.join(' · ')}</div></div>`).join('');
   });
 </script>
 </body>

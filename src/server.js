@@ -11,6 +11,10 @@ const credentialedObservation = JSON.parse(fs.readFileSync(
   path.join(root, 'fixtures/credentialed-observation.json'),
   'utf8',
 ));
+const crossEvidence = ['qcom', 'cbrs'].map(ticker => JSON.parse(fs.readFileSync(
+  path.join(root, 'reports', `cross-route-probe-${ticker}.json`),
+  'utf8',
+)));
 
 const server = http.createServer((request, response) => {
   if (request.url === '/api/report') {
@@ -21,6 +25,11 @@ const server = http.createServer((request, response) => {
   if (request.url === '/api/credentialed-observation') {
     response.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
     response.end(JSON.stringify(credentialedObservation));
+    return;
+  }
+  if (request.url === '/api/cross-evidence') {
+    response.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+    response.end(JSON.stringify(crossEvidence));
     return;
   }
   if (request.url === '/' || request.url === '/index.html') {

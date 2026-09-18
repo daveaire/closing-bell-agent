@@ -1,0 +1,39 @@
+{
+  "generatedAt": "2026-09-18T23:12:39.102Z",
+  "network": {
+    "name": "BNB Smart Chain",
+    "chainId": 56
+  },
+  "underlyingTicker": "CBRS",
+  "notionalUsd": 500,
+  "indicatedGrossSpreadBps": 29.532549454986956,
+  "buy": {
+    "symbol": "CBRSB",
+    "platformId": "bstock",
+    "vendor": "LiquidMesh",
+    "boughtTokens": 2.517886150000364,
+    "acquiredShares": 2.517886150000364,
+    "reportedTradeFeeUsd": 0.01953982,
+    "priceImpactPercent": 0,
+    "calldataBuilt": true
+  },
+  "sell": {
+    "symbol": "CBRSon",
+    "platformId": "ondo",
+    "vendor": "LiquidMesh",
+    "equivalentSellTokens": 2.517886150000364,
+    "usdtOut": 498.8197575990465,
+    "reportedTradeFeeUsd": 0.01929025,
+    "priceImpactPercent": 0,
+    "calldataBuilt": true
+  },
+  "quoteImpliedDeltaUsd": -1.1802424009534889,
+  "quoteImpliedDeltaBps": -23.604848019069777,
+  "decision": "BLOCK",
+  "reasons": [
+    "non-positive-quote-implied-delta",
+    "inventory-and-funded-simulation-required"
+  ],
+  "caveat": "The two legs rotate economically equivalent share exposure between different issuers. They are not a closed conversion and require prefunded sell inventory, issuer-risk policy, gas accounting, and successful simulations.",
+  "broadcastEnabled": false
+}

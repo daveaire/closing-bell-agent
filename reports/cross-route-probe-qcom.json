@@ -1,0 +1,39 @@
+{
+  "generatedAt": "2026-09-18T23:12:33.212Z",
+  "network": {
+    "name": "BNB Smart Chain",
+    "chainId": 56
+  },
+  "underlyingTicker": "QCOM",
+  "notionalUsd": 500,
+  "indicatedGrossSpreadBps": 37.6768802925187,
+  "buy": {
+    "symbol": "QCOMB",
+    "platformId": "bstock",
+    "vendor": "LiquidMesh",
+    "boughtTokens": 2.7951466741847093,
+    "acquiredShares": 2.805780315590483,
+    "reportedTradeFeeUsd": 0.0219747,
+    "priceImpactPercent": 0,
+    "calldataBuilt": true
+  },
+  "sell": {
+    "symbol": "QCOMon",
+    "platformId": "ondo",
+    "vendor": "LiquidMesh",
+    "equivalentSellTokens": 2.754716677724288,
+    "usdtOut": 499.41926447835755,
+    "reportedTradeFeeUsd": 0.02295628,
+    "priceImpactPercent": 0,
+    "calldataBuilt": true
+  },
+  "quoteImpliedDeltaUsd": -0.5807355216424526,
+  "quoteImpliedDeltaBps": -11.61471043284905,
+  "decision": "BLOCK",
+  "reasons": [
+    "non-positive-quote-implied-delta",
+    "inventory-and-funded-simulation-required"
+  ],
+  "caveat": "The two legs rotate economically equivalent share exposure between different issuers. They are not a closed conversion and require prefunded sell inventory, issuer-risk policy, gas accounting, and successful simulations.",
+  "broadcastEnabled": false
+}

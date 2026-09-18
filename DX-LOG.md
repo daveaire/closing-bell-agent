@@ -33,3 +33,11 @@ This is a working lab notebook. It records only behavior actually observed while
 - quote availability across multiple vendors and observation windows.
 
 No reliability claim is inferred from this single credentialed observation.
+
+## 2026-09-18 — cross-issuer execution probes
+
+- A fresh 488-candidate scan found only two open-market, fresh-price bStock/Ondo pairs with a ratio-normalized gross spread above 25 bps: QCOM at 37.68 bps and CBRS at 29.53 bps.
+- Correct normalization matters in both directions. `tokenPrice / tokenToShareRatio` compares implied per-share prices; an inventory rotation multiplies purchased tokens by the buy issuer's ratio and divides the resulting share exposure by the sell issuer's ratio.
+- Binance Aggregator produced LiquidMesh quotes and unsigned calldata for both legs of both $500 probes.
+- The executable QCOM rotation returned `$499.42` USDT and the CBRS rotation returned `$498.82`, both before gas. Closing Bell Agent rejected both instead of promoting the displayed gross spread as profit.
+- The API-reported `tradeFee` values were small relative to the total quote deterioration, so judging profitability from that field alone would have been misleading. Comparing complete input and output amounts across both legs produced the useful decision.

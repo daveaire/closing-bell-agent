@@ -1,6 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { evaluateCandidate, normalizeRwaToken } from '../src/decision-engine.js';
+import {
+  evaluateCandidate,
+  findCrossRepresentationSpreads,
+  normalizeRwaToken,
+} from '../src/decision-engine.js';
 
 const token = {
   tokenSymbol: 'TESTon', underlyingTicker: 'TEST', platformId: 'ondo',
@@ -36,4 +40,21 @@ test('fresh, fairly priced, quoted and simulated route reaches human review', ()
   assert.equal(decision.decision, 'REVIEW');
   assert.deepEqual(decision.reasons, []);
   assert.equal(decision.broadcastEnabled, false);
+});
+
+test('cross-representation spreads normalize different issuer share ratios', () => {
+  const common = {
+    underlyingTicker: 'ACME', marketOpen: true, priceAgeMs: 1_000,
+    referencePrice: 100, fairTokenPrice: 100, premiumBps: 0,
+  };
+  const spreads = findCrossRepresentationSpreads([
+    { ...common, symbol: 'ACMEon', platformId: 'ondo', contract: '0x1', tokenPrice: 50, tokenToShareRatio: 0.5 },
+    { ...common, symbol: 'ACMEx', platformId: 'xstocks', contract: '0x2', tokenPrice: 102, tokenToShareRatio: 1 },
+  ], { minimumGrossBps: 25 });
+
+  assert.equal(spreads.length, 1);
+  assert.equal(spreads[0].buy.symbol, 'ACMEon');
+  assert.equal(spreads[0].sell.symbol, 'ACMEx');
+  assert.ok(Math.abs(spreads[0].grossSpreadBps - 200) < 1e-9);
+  assert.equal(spreads[0].decision, 'QUOTE_REQUIRED');
 });

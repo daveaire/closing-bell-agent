@@ -6,10 +6,12 @@
   "description": "A BSC tokenized-stock execution gate built for the BNB Chain Tokenized Stocks Hackathon.",
   "scripts": {
     "test": "node --test test/*.test.js",
-    "check": "node --check src/binance-client.js && node --check src/decision-engine.js && node --check src/scan.js && node --check src/probe-route.js && node --check src/server.js && npm test",
+    "check": "node --check src/binance-client.js && node --check src/decision-engine.js && node --check src/scan.js && node --check src/cross-market-scan.js && node --check src/probe-route.js && node --check src/probe-cross-route.js && node --check src/server.js && npm test",
     "demo": "node src/scan.js --fixture",
     "scan": "node src/scan.js",
     "probe:route": "node src/probe-route.js",
+    "scan:cross": "node src/cross-market-scan.js",
+    "probe:cross": "node src/probe-cross-route.js",
     "dashboard": "node src/server.js"
   }
 }

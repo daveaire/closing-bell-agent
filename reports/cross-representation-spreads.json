@@ -1,0 +1,58 @@
+{
+  "generatedAt": "2026-09-18T23:10:19.120Z",
+  "network": {
+    "name": "BNB Smart Chain",
+    "chainId": 56
+  },
+  "sourceCandidateCount": 488,
+  "policy": {
+    "maxPriceAgeMs": 120000,
+    "minimumGrossBps": 25
+  },
+  "caveat": "Gross normalized dislocations only. Both sell and buy legs require inventory, executable quotes, fee accounting, calldata construction, and successful simulation before review.",
+  "spreadCount": 2,
+  "spreads": [
+    {
+      "underlyingTicker": "QCOM",
+      "grossSpreadBps": 37.6768802925187,
+      "buy": {
+        "symbol": "QCOMB",
+        "platformId": "bstock",
+        "contract": "0x5f7a56e877b9130608bf8be962621011182fefe1",
+        "tokenPrice": 178.1,
+        "tokenToShareRatio": 1.00380432322353,
+        "impliedSharePrice": 177.42501788402853
+      },
+      "sell": {
+        "symbol": "QCOMon",
+        "platformId": "ondo",
+        "contract": "0xfbd4d681c92ead6af0e49950c8b2e47eeacbb2db",
+        "tokenPrice": 181.39478396283423,
+        "tokenToShareRatio": 1.0185368020889827,
+        "impliedSharePrice": 178.09349999999998
+      },
+      "decision": "QUOTE_REQUIRED"
+    },
+    {
+      "underlyingTicker": "CBRS",
+      "grossSpreadBps": 29.532549454986956,
+      "buy": {
+        "symbol": "CBRSB",
+        "platformId": "bstock",
+        "contract": "0xe81c6bb0266cd68b4f17278531dd03ea1f12da4e",
+        "tokenPrice": 198.16,
+        "tokenToShareRatio": 1,
+        "impliedSharePrice": 198.16
+      },
+      "sell": {
+        "symbol": "CBRSon",
+        "platformId": "ondo",
+        "contract": "0x441a4d4fc23f17f4cf23e3d60f12d2bd6f176728",
+        "tokenPrice": 198.745217,
+        "tokenToShareRatio": 1,
+        "impliedSharePrice": 198.745217
+      },
+      "decision": "QUOTE_REQUIRED"
+    }
+  ]
+}

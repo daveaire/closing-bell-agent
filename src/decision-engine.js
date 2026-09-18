@@ -63,3 +63,58 @@ export function rankCandidates(rows) {
     return aPremium - bPremium;
   });
 }
+
+export function findCrossRepresentationSpreads(rows, policy = {}) {
+  const maxPriceAgeMs = Number(policy.maxPriceAgeMs ?? 120_000);
+  const minimumGrossBps = Number(policy.minimumGrossBps ?? 0);
+  const groups = new Map();
+
+  for (const row of rows) {
+    if (!row.underlyingTicker || row.tokenPrice === null || !row.tokenToShareRatio) continue;
+    if (!row.marketOpen || row.priceAgeMs === null || row.priceAgeMs > maxPriceAgeMs) continue;
+    const impliedSharePrice = row.tokenPrice / row.tokenToShareRatio;
+    if (!Number.isFinite(impliedSharePrice) || impliedSharePrice <= 0) continue;
+    const key = row.underlyingTicker.toUpperCase();
+    const normalized = { ...row, impliedSharePrice };
+    groups.set(key, [...(groups.get(key) ?? []), normalized]);
+  }
+
+  const spreads = [];
+  for (const [underlyingTicker, representations] of groups) {
+    for (let left = 0; left < representations.length; left += 1) {
+      for (let right = left + 1; right < representations.length; right += 1) {
+        const first = representations[left];
+        const second = representations[right];
+        if (first.platformId === second.platformId) continue;
+        const [buy, sell] = first.impliedSharePrice <= second.impliedSharePrice
+          ? [first, second]
+          : [second, first];
+        const grossSpreadBps = ((sell.impliedSharePrice / buy.impliedSharePrice) - 1) * 10_000;
+        if (grossSpreadBps < minimumGrossBps) continue;
+        spreads.push({
+          underlyingTicker,
+          grossSpreadBps,
+          buy: {
+            symbol: buy.symbol,
+            platformId: buy.platformId,
+            contract: buy.contract,
+            tokenPrice: buy.tokenPrice,
+            tokenToShareRatio: buy.tokenToShareRatio,
+            impliedSharePrice: buy.impliedSharePrice,
+          },
+          sell: {
+            symbol: sell.symbol,
+            platformId: sell.platformId,
+            contract: sell.contract,
+            tokenPrice: sell.tokenPrice,
+            tokenToShareRatio: sell.tokenToShareRatio,
+            impliedSharePrice: sell.impliedSharePrice,
+          },
+          decision: 'QUOTE_REQUIRED',
+        });
+      }
+    }
+  }
+
+  return spreads.sort((a, b) => b.grossSpreadBps - a.grossSpreadBps);
+}
