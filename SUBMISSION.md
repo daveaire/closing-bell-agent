@@ -6,6 +6,8 @@
 
 **Public repository:** <https://github.com/daveaire/closing-bell-agent>
 
+**Demo video:** <https://youtu.be/Qq0qrhJXd4A> (unlisted)
+
 **Track:** Main track — tokenized stocks on BSC
 
 **Concept:** A pre-signing execution gate that makes the underlying market clock, issuer share ratio, same-stock cross-issuer dislocations, executable spot quotes, price impact, and transaction simulation visible before a tokenized-stock trade reaches a wallet.
@@ -40,10 +42,9 @@ A candidate is `BLOCK` until all evidence gates pass. A candidate becomes `REVIE
 
 ## Remaining account-bound work
 
-1. Publish the completed 2:11 demo video and record its public URL.
-2. Complete the owner-authored Developer Experience Report.
-3. Submit the final project before 2026-10-11.
+1. Complete the owner-authored Developer Experience Report.
+2. Submit the final project before 2026-10-11.
 
 Registration was recorded on 2026-09-19 and the public repository is live.
 
-The local demo artifact is `demo-output/closing-bell-agent-demo.mp4` (1280×720 H.264/AAC, SHA-256 `72b96c43e834467d0095f171fbc10a996c0b85298450b6eaa3989ee1d8a9e3d9`).
+The published demo is <https://youtu.be/Qq0qrhJXd4A>. The local source artifact is `demo-output/closing-bell-agent-demo.mp4` (1280×720 H.264/AAC, SHA-256 `72b96c43e834467d0095f171fbc10a996c0b85298450b6eaa3989ee1d8a9e3d9`).
