@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Closing Bell Agent</title>
+  <style>
+    :root { color-scheme: dark; --bg:#080b0f; --panel:#10151b; --line:#26303a; --muted:#8996a3; --text:#f5f7f8; --amber:#f3ba2f; --red:#ff6b6b; --green:#3ddc97; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:radial-gradient(circle at 70% -20%,#2a2310 0,transparent 34%),var(--bg); color:var(--text); font:15px/1.5 Inter,ui-sans-serif,system-ui,sans-serif; }
+    main { width:min(1120px,calc(100% - 40px)); margin:0 auto; padding:36px 0 64px; }
+    nav { display:flex; align-items:center; justify-content:space-between; padding-bottom:36px; }
+    .brand { display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:-.02em; }
+    .mark { width:34px; height:34px; display:grid; place-items:center; color:#111; background:var(--amber); border-radius:10px; font-weight:900; }
+    .badge { padding:6px 10px; border:1px solid var(--line); border-radius:999px; color:var(--muted); font-size:12px; }
+    h1 { margin:0; max-width:760px; font-size:clamp(38px,6vw,72px); line-height:1.02; letter-spacing:-.055em; }
+    .accent { color:var(--amber); }
+    .lede { max-width:690px; color:#adb7c0; font-size:18px; margin:22px 0 36px; }
+    .metrics { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:28px 0; }
+    .metric,.panel { background:linear-gradient(180deg,#121820,#0e1319); border:1px solid var(--line); border-radius:16px; }
+    .metric { padding:18px; }
+    .label { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.1em; }
+    .value { font-size:24px; font-weight:700; margin-top:6px; }
+    .grid { display:grid; grid-template-columns:1.35fr .65fr; gap:16px; }
+    .panel { padding:24px; }
+    .panel h2 { margin:0 0 4px; font-size:19px; }
+    .sub { color:var(--muted); margin:0 0 22px; }
+    .asset { display:grid; grid-template-columns:1.3fr repeat(3,.8fr) 1fr; align-items:center; gap:14px; padding:18px 0; border-top:1px solid var(--line); }
+    .symbol { font-weight:700; font-size:17px; }
+    .ticker { color:var(--muted); font-size:12px; }
+    .num { font-variant-numeric:tabular-nums; }
+    .decision { justify-self:end; padding:6px 10px; border-radius:8px; background:#341b1d; color:#ff9797; border:1px solid #6b3035; font-size:12px; font-weight:800; }
+    ol { margin:8px 0 0; padding-left:21px; }
+    li { padding:9px 0; color:#c3cbd2; }
+    .dot { width:8px; height:8px; display:inline-block; border-radius:50%; background:var(--red); margin-right:9px; }
+    .foot { margin-top:20px; color:var(--muted); font-size:12px; display:flex; justify-content:space-between; }
+    @media (max-width:820px) { .metrics{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.asset{grid-template-columns:1fr 1fr}.decision{justify-self:start}.asset div:nth-child(4){display:none} }
+  </style>
+</head>
+<body>
+<main>
+  <nav><div class="brand"><span class="mark">CB</span> Closing Bell Agent</div><span class="badge">BSC mainnet · read only</span></nav>
+  <h1>Trade tokenized stocks with the <span class="accent">market clock visible.</span></h1>
+  <p class="lede">A pre-signing gate for bStocks and Ondo. It normalizes share ratios, measures the onchain premium, builds the spot route, and requires a successful simulation before a wallet can review a trade.</p>
+  <section class="metrics">
+    <div class="metric"><div class="label">Network</div><div class="value">BSC · 56</div></div>
+    <div class="metric"><div class="label">Candidates</div><div class="value" id="count">—</div></div>
+    <div class="metric"><div class="label">Ready for review</div><div class="value" id="ready">—</div></div>
+    <div class="metric"><div class="label">Broadcast</div><div class="value" style="color:var(--green)">Disabled</div></div>
+  </section>
+  <section class="grid">
+    <div class="panel">
+      <h2>Tokenized-stock gate</h2><p class="sub">Fair value includes the issuer's token-to-share ratio.</p>
+      <div id="assets"></div>
+    </div>
+    <aside class="panel">
+      <h2>Why blocked</h2><p class="sub">Every missing gate remains visible.</p>
+      <ol id="reasons"></ol>
+    </aside>
+  </section>
+  <div class="foot"><span id="stamp">Loading evidence…</span><span>Fixture mode · Binance Web3 API schema</span></div>
+</main>
+<script>
+  const money = v => v == null ? '—' : '$' + Number(v).toFixed(2);
+  const bps = v => v == null ? '—' : (v > 0 ? '+' : '') + Number(v).toFixed(1) + ' bps';
+  fetch('/api/report').then(r=>r.json()).then(report=>{
+    document.querySelector('#count').textContent=report.candidates.length;
+    document.querySelector('#ready').textContent=report.candidates.filter(x=>x.decision==='REVIEW').length;
+    document.querySelector('#stamp').textContent='Evidence timestamp · '+report.generatedAt;
+    document.querySelector('#assets').innerHTML=report.candidates.map(x=>`<div class="asset"><div><div class="symbol">${x.symbol}</div><div class="ticker">${x.platformId} · ${x.underlyingTicker}</div></div><div><div class="label">Token</div><div class="num">${money(x.tokenPrice)}</div></div><div><div class="label">Fair</div><div class="num">${money(x.fairTokenPrice)}</div></div><div><div class="label">Premium</div><div class="num">${bps(x.premiumBps)}</div></div><span class="decision">${x.decision}</span></div>`).join('');
+    const reasons=[...new Set(report.candidates.flatMap(x=>x.reasons))];
+    document.querySelector('#reasons').innerHTML=reasons.map(x=>`<li><span class="dot"></span>${x.replaceAll('-',' ')}</li>`).join('');
+  });
+</script>
+</body>
+</html>

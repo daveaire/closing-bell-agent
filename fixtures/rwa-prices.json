@@ -1,0 +1,13 @@
+{
+  "timestamp": 1779140000000,
+  "data": [
+    {
+      "binanceChainId": "56",
+      "tokenContractAddress": "0x8755c5c39b1aa9053a83ac731242a2cf4d04b0fe",
+      "platformId": "ondo",
+      "tokenPrice": "61.89",
+      "referencePrice": "61.746364",
+      "tokenPriceUpdatedAt": 1779139990000
+    }
+  ]
+}

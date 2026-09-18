@@ -1,0 +1,14 @@
+{
+  "name": "closing-bell-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A BSC tokenized-stock execution gate built for the BNB Chain Tokenized Stocks Hackathon.",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "check": "node --check src/binance-client.js && node --check src/decision-engine.js && node --check src/scan.js && npm test",
+    "demo": "node src/scan.js --fixture",
+    "scan": "node src/scan.js",
+    "dashboard": "node src/server.js"
+  }
+}

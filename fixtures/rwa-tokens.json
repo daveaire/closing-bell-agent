@@ -1,0 +1,24 @@
+{
+  "timestamp": 1779140000000,
+  "data": [
+    {
+      "binanceChainId": "56",
+      "tokenContractAddress": "0x8755c5c39b1aa9053a83ac731242a2cf4d04b0fe",
+      "platformId": "ondo",
+      "tokenName": "SolarEdge Technologies (Ondo Tokenized)",
+      "tokenSymbol": "SEDGon",
+      "decimals": 18,
+      "underlyingTicker": "SEDG",
+      "tokenToShareRatio": "1.003701",
+      "statusInfo": {
+        "openState": false,
+        "marketStatus": "closed",
+        "reasonCode": "MARKET_CLOSED",
+        "reasonMsg": "Weekend or Holiday",
+        "nextOpenTime": 1779111060000
+      },
+      "tokenPrice": "61.89",
+      "referencePrice": "61.746364"
+    }
+  ]
+}
