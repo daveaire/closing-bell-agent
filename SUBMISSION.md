@@ -4,6 +4,8 @@
 
 **Name:** Closing Bell Agent
 
+**Public repository:** <https://github.com/daveaire/closing-bell-agent>
+
 **Track:** Main track — tokenized stocks on BSC
 
 **Special prize fit:** Best Use of Agentic Wallet / Wallet Skills
@@ -40,6 +42,8 @@ A candidate is `BLOCK` until all evidence gates pass. A candidate becomes `REVIE
 
 ## Remaining account-bound work
 
-1. Register for the hackathon.
-2. Publish the public repository and optional four-minute demo.
-3. Submit before 2026-10-11.
+1. Record and publish the optional four-minute demo.
+2. Complete the owner-authored Developer Experience Report.
+3. Submit the final project before 2026-10-11.
+
+Registration was recorded on 2026-09-19 and the public repository is live.

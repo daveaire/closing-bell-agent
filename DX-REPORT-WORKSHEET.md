@@ -4,7 +4,7 @@ The official form says perfunctory or AI-generated reports are not accepted. Thi
 
 ## Owner input still required
 
-- Public repository URL: `[publish after explicit approval]`
+- Public repository URL: `https://github.com/daveaire/closing-bell-agent`
 - Web3 experience: `[less than 6 months / 6–12 months / 1–3 years / more than 3 years]`
 - Time from docs to first successful call: `[owner estimate]`
 - Time to create a working API key: `[owner estimate]`
