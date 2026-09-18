@@ -9,6 +9,7 @@
     "check": "node --check src/binance-client.js && node --check src/decision-engine.js && node --check src/scan.js && npm test",
     "demo": "node src/scan.js --fixture",
     "scan": "node src/scan.js",
+    "probe:route": "node src/probe-route.js",
     "dashboard": "node src/server.js"
   }
 }

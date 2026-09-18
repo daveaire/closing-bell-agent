@@ -15,9 +15,18 @@ async function loadData() {
     secretKey: process.env.OC_SECRET_KEY,
   });
   const tokens = await client.listRwaTokens();
-  const addresses = tokens.data.map(token => token.tokenContractAddress).slice(0, 100);
-  const prices = await client.getRwaPrices(addresses);
-  return { tokens, prices };
+  const addresses = tokens.data.map(token => token.tokenContractAddress);
+  const batches = [];
+  const batchSize = Number(process.env.RWA_PRICE_BATCH_SIZE || 20);
+  for (let index = 0; index < addresses.length; index += batchSize) {
+    batches.push(addresses.slice(index, index + batchSize));
+  }
+  const priceResponses = [];
+  for (const batch of batches) priceResponses.push(await client.getRwaPrices(batch));
+  return {
+    tokens,
+    prices: { code: 0, success: true, data: priceResponses.flatMap(response => response.data) },
+  };
 }
 
 const { tokens, prices } = await loadData();

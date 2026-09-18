@@ -32,11 +32,12 @@ A candidate is `BLOCK` until all evidence gates pass. A candidate becomes `REVIE
 - The fair-value test proves the issuer ratio is applied.
 - The policy tests prove market closure and failed simulation block a trade.
 - The bundled dashboard runs without credentials using the documented SEDGon fixture.
+- An authenticated BSC scan returned 488 tokenized-stock candidates, 364 with the underlying market reported open.
+- A live $5 USDT to SNXXB probe returned a LiquidMesh quote and unsigned `SWAP` calldata.
+- Transaction simulation correctly blocked the unfunded test wallet with an insufficient-balance revert; no signature or broadcast occurred.
 
 ## Remaining account-bound work
 
-1. Register for the hackathon and create a Binance Web3 API project.
-2. Record credentialed endpoint latency and errors in `DX-LOG.md`.
-3. Run a small BSC mainnet quote and Transaction API simulation.
-4. Publish the public repository and optional four-minute demo.
-5. Submit before 2026-10-11.
+1. Register for the hackathon.
+2. Publish the public repository and optional four-minute demo.
+3. Submit before 2026-10-11.

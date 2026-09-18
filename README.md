@@ -26,6 +26,10 @@ npm run scan
 
 The live scanner uses BSC mainnet only (`binanceChainId=56`) and supports the hackathon's bStocks/Ondo scope. The API client signs the exact raw request path, including the required `/build` prefix.
 
+## Credentialed mainnet evidence
+
+On 2026-09-18 UTC, an authenticated BSC scan returned 488 tokenized-stock candidates, including 364 whose underlying market was reported open. A read-only $5 USDT to SNXXB probe returned one LiquidMesh route, built unsigned EVM calldata, and reached the Transaction API simulation gate. Simulation failed because the test wallet had no BSC USDT, so the agent blocked the route and did not broadcast. The sanitized observation is committed in `fixtures/credentialed-observation.json`; credentials and wallet details are excluded.
+
 ## Execution policy
 
 A candidate reaches `REVIEW` only when:

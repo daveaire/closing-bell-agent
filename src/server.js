@@ -7,11 +7,20 @@ import { buildFixtureReport } from './fixture-report.js';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const port = Number(process.env.PORT || 4173);
 const page = fs.readFileSync(path.join(root, 'web/index.html'));
+const credentialedObservation = JSON.parse(fs.readFileSync(
+  path.join(root, 'fixtures/credentialed-observation.json'),
+  'utf8',
+));
 
 const server = http.createServer((request, response) => {
   if (request.url === '/api/report') {
     response.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
     response.end(JSON.stringify(buildFixtureReport()));
+    return;
+  }
+  if (request.url === '/api/credentialed-observation') {
+    response.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+    response.end(JSON.stringify(credentialedObservation));
     return;
   }
   if (request.url === '/' || request.url === '/index.html') {

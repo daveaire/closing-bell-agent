@@ -54,8 +54,10 @@ export class BinanceWeb3Client {
     return data;
   }
 
-  listRwaTokens(platformId) {
-    return this.request('GET', '/api/v1/dex/market/rwa/tokens', { query: { platformId } });
+  listRwaTokens(platformId, binanceChainId = '56') {
+    return this.request('GET', '/api/v1/dex/market/rwa/tokens', {
+      query: { binanceChainId, platformId },
+    });
   }
 
   getRwaPrices(addresses) {
@@ -72,9 +74,13 @@ export class BinanceWeb3Client {
     });
   }
 
-  buildSwap({ quoteId, userWalletAddress, slippagePercent = '0.5' }) {
+  buildSwap({ amount, fromTokenAddress, toTokenAddress, quoteId, userWalletAddress,
+    slippagePercent = '0.5' }) {
     return this.request('GET', '/api/v1/dex/aggregator/swap', {
-      query: { binanceChainId: '56', quoteId, userWalletAddress, slippagePercent },
+      query: {
+        binanceChainId: '56', amount, fromTokenAddress, toTokenAddress,
+        quoteId, userWalletAddress, slippagePercent,
+      },
     });
   }
 

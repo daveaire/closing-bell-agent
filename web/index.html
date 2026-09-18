@@ -33,8 +33,14 @@
     ol { margin:8px 0 0; padding-left:21px; }
     li { padding:9px 0; color:#c3cbd2; }
     .dot { width:8px; height:8px; display:inline-block; border-radius:50%; background:var(--red); margin-right:9px; }
+    .live { margin-top:16px; display:grid; grid-template-columns:1.2fr .8fr; gap:16px; }
+    .route-proof { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:18px; }
+    .proof-cell { border-top:1px solid var(--line); padding-top:12px; }
+    .proof-cell strong { display:block; margin-top:4px; font-size:17px; }
+    .blocked { color:var(--red); }
+    .safe { color:var(--green); }
     .foot { margin-top:20px; color:var(--muted); font-size:12px; display:flex; justify-content:space-between; }
-    @media (max-width:820px) { .metrics{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.asset{grid-template-columns:1fr 1fr}.decision{justify-self:start}.asset div:nth-child(4){display:none} }
+    @media (max-width:820px) { .metrics{grid-template-columns:1fr 1fr}.grid,.live{grid-template-columns:1fr}.route-proof{grid-template-columns:1fr 1fr}.asset{grid-template-columns:1fr 1fr}.decision{justify-self:start}.asset div:nth-child(4){display:none} }
   </style>
 </head>
 <body>
@@ -58,7 +64,26 @@
       <ol id="reasons"></ol>
     </aside>
   </section>
-  <div class="foot"><span id="stamp">Loading evidence…</span><span>Fixture mode · Binance Web3 API schema</span></div>
+  <section class="live">
+    <div class="panel">
+      <div class="label">Authenticated BSC observation</div>
+      <h2 id="live-pair">Loading route…</h2>
+      <p class="sub">A real Binance Web3 quote and unsigned transaction build. No signature and no broadcast.</p>
+      <div class="route-proof">
+        <div class="proof-cell"><span class="label">Candidates</span><strong id="live-count">—</strong></div>
+        <div class="proof-cell"><span class="label">Route</span><strong id="live-vendor">—</strong></div>
+        <div class="proof-cell"><span class="label">Impact</span><strong id="live-impact">—</strong></div>
+        <div class="proof-cell"><span class="label">Calldata</span><strong class="safe" id="live-build">—</strong></div>
+      </div>
+    </div>
+    <aside class="panel">
+      <div class="label">Funded simulation gate</div>
+      <h2 class="blocked" id="live-simulation">—</h2>
+      <p class="sub" id="live-reason">—</p>
+      <div class="proof-cell"><span class="label">Quote · build · simulation</span><strong id="live-latency">—</strong></div>
+    </aside>
+  </section>
+  <div class="foot"><span id="stamp">Loading evidence…</span><span>Fixture decision set + credentialed route evidence</span></div>
 </main>
 <script>
   const money = v => v == null ? '—' : '$' + Number(v).toFixed(2);
@@ -70,6 +95,17 @@
     document.querySelector('#assets').innerHTML=report.candidates.map(x=>`<div class="asset"><div><div class="symbol">${x.symbol}</div><div class="ticker">${x.platformId} · ${x.underlyingTicker}</div></div><div><div class="label">Token</div><div class="num">${money(x.tokenPrice)}</div></div><div><div class="label">Fair</div><div class="num">${money(x.fairTokenPrice)}</div></div><div><div class="label">Premium</div><div class="num">${bps(x.premiumBps)}</div></div><span class="decision">${x.decision}</span></div>`).join('');
     const reasons=[...new Set(report.candidates.flatMap(x=>x.reasons))];
     document.querySelector('#reasons').innerHTML=reasons.map(x=>`<li><span class="dot"></span>${x.replaceAll('-',' ')}</li>`).join('');
+  });
+  fetch('/api/credentialed-observation').then(r=>r.json()).then(x=>{
+    const route=x.route;
+    document.querySelector('#live-pair').textContent=`${route.pair} · $${route.notionalUsd}`;
+    document.querySelector('#live-count').textContent=`${x.candidateCount} (${x.marketOpenCount} open)`;
+    document.querySelector('#live-vendor').textContent=route.vendor;
+    document.querySelector('#live-impact').textContent=`${route.priceImpactPercent}%`;
+    document.querySelector('#live-build').textContent=route.unsignedCalldataBuilt?'BUILT':'MISSING';
+    document.querySelector('#live-simulation').textContent=route.simulation.status;
+    document.querySelector('#live-reason').textContent=route.simulation.reason;
+    document.querySelector('#live-latency').textContent=`${route.latencyMs.quote} · ${route.latencyMs.build} · ${route.latencyMs.simulation} ms`;
   });
 </script>
 </body>
