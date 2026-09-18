@@ -23,7 +23,8 @@ This is a working lab notebook. It records only behavior actually observed while
 - The same quote built unsigned EVM calldata with `executionMode=SWAP`. This differs from the Trading API statement that equity/RWA tokens always return `RFQ`; at least this BStock/LiquidMesh route used the normal swap path.
 - Transaction API simulation returned `FAILED` with `execution reverted: BEP20: transfer amount exceeds balance`, which is correct for the configured read-only wallet because it has no BSC USDT. Closing Bell Agent kept the candidate blocked and did not broadcast.
 - The authenticated BSC scan returned 488 tokenized-stock candidates; 364 reported an open underlying market at the observation time.
-- The latest route probe measured 785 ms for quote, 611 ms for transaction build, and 364 ms for simulation. These are single observations, not reliability or performance claims.
+- The integrated decision probe discovered and priced SNXXB, obtained a real quote, built unsigned calldata, simulated it, and passed the evidence into the same policy engine used by the dashboard. It returned `BLOCK` with only `simulation-not-successful`; price freshness, the open market, ratio-adjusted fair value, premium policy, honeypot checks, price impact, quote, and calldata gates all passed.
+- That probe measured 1,525 ms for discovery and target pricing, 343 ms for quote, 328 ms for transaction build, and 481 ms for simulation. These are single observations, not reliability or performance claims.
 
 ## Still unmeasured
 

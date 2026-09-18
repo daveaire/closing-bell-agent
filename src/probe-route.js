@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { performance } from 'node:perf_hooks';
 import { BinanceWeb3Client } from './binance-client.js';
+import { evaluateCandidate, normalizeRwaToken } from './decision-engine.js';
 
 const USDT = '0x55d398326f99059fF775485246999027B3197955';
 const DEFAULT_TARGET = '0x9e82e3da8f1115b73d24bb24113ab836ffdab6b6'; // SNXXB
@@ -18,6 +19,16 @@ const client = new BinanceWeb3Client({
   apiKey: process.env.OC_API_KEY,
   secretKey: process.env.OC_SECRET_KEY,
 });
+
+const discoveryStarted = performance.now();
+const tokenResponse = await client.listRwaTokens();
+const token = tokenResponse.data.find(row =>
+  row.tokenContractAddress?.toLowerCase() === target.toLowerCase());
+if (!token) throw new Error(`Target RWA ${target} was not returned by BSC discovery`);
+const priceResponse = await client.getRwaPrices([target]);
+const price = priceResponse.data[0];
+if (!price) throw new Error(`Target RWA ${target} has no live price`);
+const discoveryLatencyMs = Math.round(performance.now() - discoveryStarted);
 
 const quoteStarted = performance.now();
 const quoteResponse = await client.quote({
@@ -67,7 +78,12 @@ const result = {
   target,
   amount,
   routeCount: routes.length,
-  latencyMs: { quote: quoteLatencyMs, build: buildLatencyMs, simulation: simulationLatencyMs },
+  latencyMs: {
+    discovery: discoveryLatencyMs,
+    quote: quoteLatencyMs,
+    build: buildLatencyMs,
+    simulation: simulationLatencyMs,
+  },
   bestRoute: {
     vendorName: route.vendorName,
     toTokenAmount: route.toTokenAmount,
@@ -89,6 +105,31 @@ const result = {
   } : null,
   broadcastEnabled: false,
 };
+const policy = {
+  maxPremiumBps: Number(process.env.MAX_PREMIUM_BPS || 75),
+  maxPriceAgeMs: Number(process.env.MAX_PRICE_AGE_MS || 120000),
+};
+const candidate = normalizeRwaToken(token, price);
+const decision = evaluateCandidate(candidate, {
+  quote: {
+    priceImpactPercent: route.priceImpactPercent,
+    isHoneyPot: Boolean(route.fromToken?.isHoneyPot || route.toToken?.isHoneyPot),
+  },
+  swapBuilt: Boolean(evmTx?.to && evmTx?.data),
+  simulation,
+}, policy);
+result.policy = policy;
+result.candidate = {
+  symbol: decision.symbol,
+  platformId: decision.platformId,
+  marketOpen: decision.marketOpen,
+  tokenPrice: decision.tokenPrice,
+  fairTokenPrice: decision.fairTokenPrice,
+  premiumBps: decision.premiumBps,
+  priceAgeMs: decision.priceAgeMs,
+};
+result.decision = decision.decision;
+result.reasons = decision.reasons;
 fs.mkdirSync(path.dirname(reportPath), { recursive: true });
 fs.writeFileSync(reportPath, JSON.stringify(result, null, 2));
 console.log(JSON.stringify(result, null, 2));
