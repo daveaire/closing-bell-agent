@@ -87,7 +87,7 @@ const result = {
   bestRoute: {
     vendorName: route.vendorName,
     toTokenAmount: route.toTokenAmount,
-    tradeFeeUsd: route.tradeFee,
+    reportedNetworkFeeUsd: route.tradeFee,
     priceImpactPercent: route.priceImpactPercent,
     fromHoneyPot: route.fromToken?.isHoneyPot ?? null,
     toHoneyPot: route.toToken?.isHoneyPot ?? null,
@@ -124,8 +124,8 @@ result.candidate = {
   platformId: decision.platformId,
   marketOpen: decision.marketOpen,
   tokenPrice: decision.tokenPrice,
-  fairTokenPrice: decision.fairTokenPrice,
-  premiumBps: decision.premiumBps,
+  ratioAdjustedReferencePrice: decision.ratioAdjustedReferencePrice,
+  referenceDeltaBps: decision.referenceDeltaBps,
   priceAgeMs: decision.priceAgeMs,
 };
 result.decision = decision.decision;

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-18T23:12:39.102Z",
+  "generatedAt": "2026-09-18T23:21:37.871Z",
   "network": {
     "name": "BNB Smart Chain",
     "chainId": 56
@@ -11,9 +11,9 @@
     "symbol": "CBRSB",
     "platformId": "bstock",
     "vendor": "LiquidMesh",
-    "boughtTokens": 2.517886150000364,
-    "acquiredShares": 2.517886150000364,
-    "reportedTradeFeeUsd": 0.01953982,
+    "boughtTokens": 2.5173473353236355,
+    "acquiredShares": 2.5173473353236355,
+    "reportedNetworkFeeUsd": 0.01857463,
     "priceImpactPercent": 0,
     "calldataBuilt": true
   },
@@ -21,14 +21,14 @@
     "symbol": "CBRSon",
     "platformId": "ondo",
     "vendor": "LiquidMesh",
-    "equivalentSellTokens": 2.517886150000364,
-    "usdtOut": 498.8197575990465,
-    "reportedTradeFeeUsd": 0.01929025,
+    "equivalentSellTokens": 2.5173473353236355,
+    "usdtOut": 499.03736172762854,
+    "reportedNetworkFeeUsd": 0.01791731,
     "priceImpactPercent": 0,
     "calldataBuilt": true
   },
-  "quoteImpliedDeltaUsd": -1.1802424009534889,
-  "quoteImpliedDeltaBps": -23.604848019069777,
+  "quoteImpliedDeltaUsd": -0.9626382723714642,
+  "quoteImpliedDeltaBps": -19.252765447429283,
   "decision": "BLOCK",
   "reasons": [
     "non-positive-quote-implied-delta",

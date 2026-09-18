@@ -7,10 +7,10 @@ export function normalizeRwaToken(token, price, now = Date.now()) {
   const tokenPrice = finite(price?.tokenPrice ?? token.tokenPrice);
   const referencePrice = finite(price?.referencePrice ?? token.referencePrice);
   const ratio = finite(token.tokenToShareRatio) ?? 1;
-  const fairTokenPrice = referencePrice === null ? null : referencePrice * ratio;
-  const premiumBps = tokenPrice === null || !fairTokenPrice
+  const ratioAdjustedReferencePrice = referencePrice === null ? null : referencePrice * ratio;
+  const referenceDeltaBps = tokenPrice === null || !ratioAdjustedReferencePrice
     ? null
-    : ((tokenPrice / fairTokenPrice) - 1) * 10_000;
+    : ((tokenPrice / ratioAdjustedReferencePrice) - 1) * 10_000;
   const priceTimestamp = finite(price?.tokenPriceUpdatedAt);
   return {
     symbol: token.tokenSymbol,
@@ -24,8 +24,9 @@ export function normalizeRwaToken(token, price, now = Date.now()) {
     tokenPrice,
     referencePrice,
     tokenToShareRatio: ratio,
-    fairTokenPrice,
-    premiumBps,
+    ratioAdjustedReferencePrice,
+    referenceSource: 'binance-rwa-api-derived',
+    referenceDeltaBps,
     priceTimestamp,
     priceAgeMs: priceTimestamp === null ? null : Math.max(0, now - priceTimestamp),
   };
@@ -38,7 +39,7 @@ export function evaluateCandidate(candidate, evidence = {}, policy = {}) {
   if (candidate.tokenPrice === null || candidate.referencePrice === null) reasons.push('missing-price');
   if (candidate.priceAgeMs === null || candidate.priceAgeMs > maxPriceAgeMs) reasons.push('stale-price');
   if (!candidate.marketOpen) reasons.push('underlying-market-closed');
-  if (candidate.premiumBps === null || Math.abs(candidate.premiumBps) > maxPremiumBps) reasons.push('premium-outside-policy');
+  if (candidate.referenceDeltaBps === null || Math.abs(candidate.referenceDeltaBps) > maxPremiumBps) reasons.push('reference-delta-outside-policy');
   if (!evidence.quote) reasons.push('missing-executable-quote');
   if (evidence.quote?.isHoneyPot) reasons.push('honeypot-risk');
   if (finite(evidence.quote?.priceImpactPercent) !== null
@@ -58,9 +59,9 @@ export function evaluateCandidate(candidate, evidence = {}, policy = {}) {
 export function rankCandidates(rows) {
   return [...rows].sort((a, b) => {
     if (a.decision !== b.decision) return a.decision === 'REVIEW' ? -1 : 1;
-    const aPremium = Math.abs(a.premiumBps ?? Infinity);
-    const bPremium = Math.abs(b.premiumBps ?? Infinity);
-    return aPremium - bPremium;
+    const aDelta = Math.abs(a.referenceDeltaBps ?? Infinity);
+    const bDelta = Math.abs(b.referenceDeltaBps ?? Infinity);
+    return aDelta - bDelta;
   });
 }
 

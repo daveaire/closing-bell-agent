@@ -58,7 +58,7 @@
   </section>
   <section class="grid">
     <div class="panel">
-      <h2>Tokenized-stock gate</h2><p class="sub">Fair value includes the issuer's token-to-share ratio.</p>
+      <h2>Tokenized-stock gate</h2><p class="sub">The ratio-adjusted API reference is a screening signal, not an independent official stock quote.</p>
       <div id="assets"></div>
     </div>
     <aside class="panel">
@@ -100,7 +100,7 @@
     document.querySelector('#count').textContent=report.candidates.length;
     document.querySelector('#ready').textContent=report.candidates.filter(x=>x.decision==='REVIEW').length;
     document.querySelector('#stamp').textContent='Fixture timestamp · '+report.generatedAt;
-    document.querySelector('#assets').innerHTML=report.candidates.map(x=>`<div class="asset"><div><div class="symbol">${x.symbol}</div><div class="ticker">${x.platformId} · ${x.underlyingTicker}</div></div><div><div class="label">Token</div><div class="num">${money(x.tokenPrice)}</div></div><div><div class="label">Fair</div><div class="num">${money(x.fairTokenPrice)}</div></div><div><div class="label">Premium</div><div class="num">${bps(x.premiumBps)}</div></div><span class="decision">${x.decision}</span></div>`).join('');
+    document.querySelector('#assets').innerHTML=report.candidates.map(x=>`<div class="asset"><div><div class="symbol">${x.symbol}</div><div class="ticker">${x.platformId} · ${x.underlyingTicker}</div></div><div><div class="label">Token</div><div class="num">${money(x.tokenPrice)}</div></div><div><div class="label">Ratio ref.</div><div class="num">${money(x.ratioAdjustedReferencePrice)}</div></div><div><div class="label">Delta</div><div class="num">${bps(x.referenceDeltaBps)}</div></div><span class="decision">${x.decision}</span></div>`).join('');
     const reasons=[...new Set(report.candidates.flatMap(x=>x.reasons))];
     document.querySelector('#reasons').innerHTML=reasons.map(x=>`<li><span class="dot"></span>${x.replaceAll('-',' ')}</li>`).join('');
   });

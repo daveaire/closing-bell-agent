@@ -12,10 +12,10 @@ const token = {
   tokenToShareRatio: '1.01', statusInfo: { openState: true, marketStatus: 'regular' },
 };
 
-test('fair price includes issuer token-to-share ratio', () => {
+test('ratio-adjusted API reference includes issuer token-to-share ratio', () => {
   const row = normalizeRwaToken(token, { tokenPrice: '101', referencePrice: '100', tokenPriceUpdatedAt: 99000 }, 100000);
-  assert.equal(row.fairTokenPrice, 101);
-  assert.equal(row.premiumBps, 0);
+  assert.equal(row.ratioAdjustedReferencePrice, 101);
+  assert.equal(row.referenceDeltaBps, 0);
 });
 
 test('closed market, absent quote, and absent simulation are explicit blockers', () => {
@@ -30,7 +30,7 @@ test('closed market, absent quote, and absent simulation are explicit blockers',
   assert.ok(decision.reasons.includes('simulation-not-successful'));
 });
 
-test('fresh, fairly priced, quoted and simulated route reaches human review', () => {
+test('fresh, ratio-screened, quoted and simulated route reaches human review', () => {
   const row = normalizeRwaToken(token, { tokenPrice: '101', referencePrice: '100', tokenPriceUpdatedAt: 99000 }, 100000);
   const decision = evaluateCandidate(row, {
     quote: { priceImpactPercent: '-0.05', isHoneyPot: false },
@@ -45,7 +45,7 @@ test('fresh, fairly priced, quoted and simulated route reaches human review', ()
 test('cross-representation spreads normalize different issuer share ratios', () => {
   const common = {
     underlyingTicker: 'ACME', marketOpen: true, priceAgeMs: 1_000,
-    referencePrice: 100, fairTokenPrice: 100, premiumBps: 0,
+    referencePrice: 100, ratioAdjustedReferencePrice: 100, referenceDeltaBps: 0,
   };
   const spreads = findCrossRepresentationSpreads([
     { ...common, symbol: 'ACMEon', platformId: 'ondo', contract: '0x1', tokenPrice: 50, tokenToShareRatio: 0.5 },

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-18T23:12:33.212Z",
+  "generatedAt": "2026-09-18T23:21:32.684Z",
   "network": {
     "name": "BNB Smart Chain",
     "chainId": 56
@@ -11,9 +11,9 @@
     "symbol": "QCOMB",
     "platformId": "bstock",
     "vendor": "LiquidMesh",
-    "boughtTokens": 2.7951466741847093,
-    "acquiredShares": 2.805780315590483,
-    "reportedTradeFeeUsd": 0.0219747,
+    "boughtTokens": 2.795721081456811,
+    "acquiredShares": 2.80635690809351,
+    "reportedNetworkFeeUsd": 0.01909571,
     "priceImpactPercent": 0,
     "calldataBuilt": true
   },
@@ -21,14 +21,14 @@
     "symbol": "QCOMon",
     "platformId": "ondo",
     "vendor": "LiquidMesh",
-    "equivalentSellTokens": 2.754716677724288,
-    "usdtOut": 499.41926447835755,
-    "reportedTradeFeeUsd": 0.02295628,
+    "equivalentSellTokens": 2.755282776565139,
+    "usdtOut": 499.68118928689995,
+    "reportedNetworkFeeUsd": 0.01944961,
     "priceImpactPercent": 0,
     "calldataBuilt": true
   },
-  "quoteImpliedDeltaUsd": -0.5807355216424526,
-  "quoteImpliedDeltaBps": -11.61471043284905,
+  "quoteImpliedDeltaUsd": -0.31881071310004927,
+  "quoteImpliedDeltaBps": -6.376214262000985,
   "decision": "BLOCK",
   "reasons": [
     "non-positive-quote-implied-delta",
