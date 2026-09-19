@@ -47,14 +47,14 @@ The event is still a review candidate, not an authorization to trade. It needs f
 
 ## Build the demo video
 
-On macOS, install the two local rendering dependencies and build the narrated 1280×720 submission video:
+Install the rendering and neural narration dependencies, then build the narrated 1280×720 submission video:
 
 ```sh
-pip install Pillow imageio-ffmpeg
+pip install Pillow imageio-ffmpeg edge-tts
 /opt/homebrew/bin/python3.10 scripts/build-demo-video.py
 ```
 
-The generated `demo-output/closing-bell-agent-demo.mp4` is 2 minutes 11 seconds and stays outside version control.
+The builder uses Microsoft Edge's natural Andrew neural voice. The generated `demo-output/closing-bell-agent-demo.mp4` stays outside version control.
 
 ## Credentialed mainnet evidence
 

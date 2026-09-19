@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the sub-four-minute Closing Bell Agent demo video on macOS."""
+"""Build the narrated Closing Bell Agent demo video."""
 
 from pathlib import Path
 import subprocess
@@ -158,13 +158,21 @@ def run():
     segments = []
     for index, (make_slide, narration) in enumerate(SLIDES, 1):
         slide = OUT / f"slide-{index:02d}.png"
-        audio = OUT / f"audio-{index:02d}.aiff"
+        audio = OUT / f"audio-{index:02d}.mp3"
         segment = OUT / f"segment-{index:02d}.mp4"
         make_slide().save(slide)
-        subprocess.run(["say", "-v", "Samantha", "-r", "168", "-o", str(audio), narration], check=True)
+        subprocess.run([
+            "edge-tts",
+            "--voice", "en-US-AndrewMultilingualNeural",
+            "--rate=-4%",
+            "--pitch=-2Hz",
+            "--text", narration,
+            "--write-media", str(audio),
+        ], check=True)
         subprocess.run([
             ffmpeg, "-y", "-loop", "1", "-framerate", "30", "-i", str(slide), "-i", str(audio),
             "-c:v", "libx264", "-tune", "stillimage", "-c:a", "aac", "-b:a", "160k",
+            "-af", "loudnorm=I=-16:TP=-1.5:LRA=11",
             "-pix_fmt", "yuv420p", "-shortest", "-movflags", "+faststart", str(segment),
         ], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         segments.append(segment)
