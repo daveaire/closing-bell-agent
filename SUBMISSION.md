@@ -6,7 +6,7 @@
 
 **Public repository:** <https://github.com/daveaire/closing-bell-agent>
 
-**Demo video:** <https://youtu.be/Qq0qrhJXd4A> (unlisted)
+**Demo video:** <https://youtu.be/xbSmqcgqq2s> (unlisted, natural neural narration)
 
 **Track:** Main track — tokenized stocks on BSC
 
@@ -47,4 +47,4 @@ A candidate is `BLOCK` until all evidence gates pass. A candidate becomes `REVIE
 
 Registration was recorded on 2026-09-19 and the public repository is live.
 
-The published demo is <https://youtu.be/Qq0qrhJXd4A>. The local source artifact is `demo-output/closing-bell-agent-demo.mp4` (1280×720 H.264/AAC, SHA-256 `72b96c43e834467d0095f171fbc10a996c0b85298450b6eaa3989ee1d8a9e3d9`).
+The published demo is <https://youtu.be/xbSmqcgqq2s>. The local source artifact is `demo-output/closing-bell-agent-demo.mp4` (2:32, 1280×720 H.264/AAC, SHA-256 `6dc46b4641838b22e473455e68a08a695037571e7b45f07f28297547143d16f7`).
